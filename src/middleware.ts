@@ -5,8 +5,8 @@ import type { NextRequest } from "next/server";
 export async function middleware(request: NextRequest) {
   const token = await getToken({
     req: request,
-    salt: "",
-    secret: "",
+    salt:"",
+    secret: "process.env.AUTH_SECRET",
   });
   const url = request.nextUrl.pathname;
 
