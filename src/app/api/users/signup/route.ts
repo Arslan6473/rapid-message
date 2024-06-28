@@ -1,5 +1,5 @@
 import { connectDB } from "@/db/dbConfig";
-import { User } from "@/models/userModel";
+import { UserModel } from "@/models/userModel";
 import bcryptjs from "bcryptjs";
 import { sendVarificationCode } from "@/utils/sendVarificationEmail";
 
@@ -8,7 +8,7 @@ export const POST = async (request: Request) => {
   try {
     const { userName, email, password } = await request.json();
 
-    const existedVarifiedUser = await User.findOne({
+    const existedVarifiedUser = await UserModel.findOne({
       userName,
       isVarified: true,
     });
@@ -32,7 +32,7 @@ export const POST = async (request: Request) => {
 
     const varifyCodeExpiry = new Date(Date.now() + 3600000);
 
-    const existedUserwithEmail = await User.findOne({ email });
+    const existedUserwithEmail = await UserModel.findOne({ email });
     if (existedUserwithEmail) {
       if (existedUserwithEmail?.isVarified) {
         return Response.json(
@@ -52,7 +52,7 @@ export const POST = async (request: Request) => {
         await existedUserwithEmail.save();
       }
     } else {
-      const newUser = await User.create({
+      const newUser = await UserModel.create({
         userName,
         email,
         password: hashedPassword,

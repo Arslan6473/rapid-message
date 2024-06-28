@@ -64,10 +64,10 @@ const userSchema: Schema<User> = new Schema({
   message: [messageSchema],
 });
 
-export const User =
-  (mongoose.models.users as mongoose.Model<User>) ||
-  mongoose.model<User>("user", userSchema);
+export const UserModel =
+  (mongoose.models.User as mongoose.Model<User>) ||
+  mongoose.model<User>("User", userSchema);
 
 export const Message =
-  (mongoose.models.messages as mongoose.Model<Message>) ||
-  mongoose.model<Message>("messages", messageSchema);
+  (mongoose.models.Message as mongoose.Model<Message>) ||
+  mongoose.model<Message>("Message", messageSchema);

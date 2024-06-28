@@ -9,11 +9,12 @@ export const sendVarificationCode = async (
 ): Promise<ApiResponse> => {
   try {
     await resend.emails.send({
-      from: "onboarding@resend.dev",
+      from: "Acme <onboarding@resend.dev>",
       to: email,
       subject: "Rapid Message | Email Varification Code",
       react: VerificationEmail({ userName, otp: varifyCode }),
     });
+
     return { success: true, message: "varification message send successfully" };
   } catch (error) {
     console.log("varification email sending failed " + error);
