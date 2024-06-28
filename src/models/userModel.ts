@@ -25,7 +25,7 @@ export interface User extends Document {
   varifyCodeExpiry: Date;
   isVarified: boolean;
   isAcceptingMessage: boolean;
-  message: Message[];
+  messages: Message[];
 }
 
 const userSchema: Schema<User> = new Schema({
@@ -61,7 +61,7 @@ const userSchema: Schema<User> = new Schema({
     type: Boolean,
     default: true,
   },
-  message: [messageSchema],
+  messages: [messageSchema],
 });
 
 export const UserModel =
