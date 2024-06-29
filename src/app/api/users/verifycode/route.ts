@@ -6,6 +6,7 @@ export const POST = async (request: Request) => {
 
   try {
     const { userName, code } = await request.json();
+    console.log(userName)
 
     const user = await UserModel.findOne({ userName });
 
