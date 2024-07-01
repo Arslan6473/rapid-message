@@ -4,9 +4,7 @@ import { Message, UserModel } from "@/models/userModel";
 export const POST = async (request: Request) => {
   await connectDB();
   try {
-    const { userName, content } = await request.json();
-
-    console.log({ userName, content })
+    const { from, userName, content } = await request.json();
 
     const user = await UserModel.findOne({ userName });
 
@@ -25,7 +23,7 @@ export const POST = async (request: Request) => {
       );
     }
 
-    const newMessage = { content, createdAt: new Date() };
+    const newMessage = { content, from, createdAt: new Date() };
 
     user.messages.push(newMessage as Message);
 

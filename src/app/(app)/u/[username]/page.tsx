@@ -20,14 +20,23 @@ import { toast } from "@/components/ui/use-toast";
 import * as z from "zod";
 import { ApiResponse } from "@/types/apiResponse";
 import Link from "next/link";
-import { useParams } from "next/navigation";
+import { redirect, useParams } from "next/navigation";
 import { messageValidation } from "@/schemas/messageSchema";
+import { useSession } from "next-auth/react";
 
 export default function SendMessage() {
+  const { data: session } = useSession();
+
+
+  if(!session?.user) redirect('/')
+
+  const messageFrom = session?.user.userName;
   
   const [isLoading, setIsLoading] = useState(false);
   const params = useParams<{ username: string }>();
   const userName = params.username;
+
+  
 
   const form = useForm<z.infer<typeof messageValidation>>({
     resolver: zodResolver(messageValidation),
@@ -36,13 +45,14 @@ export default function SendMessage() {
   const messageContent = form.watch("content");
 
   const onSubmit = async (data: z.infer<typeof messageValidation>) => {
-   
+   console.log(data)
     try {
         setIsLoading(true);
       const response = await axios.post<ApiResponse>(
         "/api/messages/sendmessage",
         {
           ...data,
+          from:messageFrom,
           userName,
         }
       );
@@ -66,9 +76,9 @@ export default function SendMessage() {
   };
 
   return (
-    <div className="container mx-auto my-8 p-6 bg-white rounded max-w-4xl">
+    <div className="container mx-auto my-8 p-6 bg-white rounded max-w-4xl min-h-[61.7vh]">
       <h1 className="text-4xl font-bold mb-10 text-center">
-        Public Profile Link
+        Profile Link
       </h1>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-10">
@@ -77,10 +87,10 @@ export default function SendMessage() {
             name="content"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Send Anonymous Message to @{userName}</FormLabel>
+                <FormLabel>Send Message to @{userName}</FormLabel>
                 <FormControl>
                   <Textarea
-                    placeholder="Write your anonymous message here"
+                    placeholder="Write your message here"
                     className="resize-none"
                     {...field}
                   />
@@ -103,12 +113,7 @@ export default function SendMessage() {
           </div>
         </form>
       </Form>
-<div className="flex justify-center items-center mt-20">
-      <Link href={"/signup"}>
-      
-        <Button>Create Your Account</Button>
-      </Link>
-      </div>
+
     </div>
   );
 }
