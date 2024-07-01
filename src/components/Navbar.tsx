@@ -4,6 +4,7 @@ import React from "react";
 import Link from "next/link";
 import { useSession, signOut } from "next-auth/react";
 import { Button } from "./ui/button";
+import { MessageCircle } from 'lucide-react';
 
 function Navbar() {
   const { data: session } = useSession();
@@ -12,8 +13,8 @@ function Navbar() {
     <>
       <nav className="p-4 md:p-6 shadow-md bg-gray-900 text-white">
         <div className="container mx-auto flex flex-col md:flex-row justify-between items-center">
-          <a href="#" className="text-xl font-bold mb-4 md:mb-0">
-            Rapid Message
+          <a href="#" className="text-xl font-bold mb-4 md:mb-0 flex justify-center items-center ">
+          <MessageCircle  size={35}/> Rapid Message
           </a>
           {session ? (
             <>

@@ -24,6 +24,7 @@ import { useParams } from "next/navigation";
 import { messageValidation } from "@/schemas/messageSchema";
 
 export default function SendMessage() {
+  
   const [isLoading, setIsLoading] = useState(false);
   const params = useParams<{ username: string }>();
   const userName = params.username;
@@ -102,7 +103,7 @@ export default function SendMessage() {
           </div>
         </form>
       </Form>
-<div className="flex justify-center items-center mt-8">
+<div className="flex justify-center items-center mt-20">
       <Link href={"/signup"}>
       
         <Button>Create Your Account</Button>

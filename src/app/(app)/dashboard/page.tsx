@@ -33,6 +33,7 @@ function DashboardPage() {
     setMessages(messages.filter((message: any) => message._id !== messageId));
   };
 
+  //fetch accept message
   const fetchAcceptMessages = useCallback(async () => {
     try {
       setIsSwitchLoading(true);
@@ -56,7 +57,7 @@ function DashboardPage() {
   }, [setValue]);
 
 
-
+//fetch all messsages
   const fetchAllMessages = useCallback(
     async (refresh: boolean = false) => {
       try {
@@ -92,20 +93,21 @@ function DashboardPage() {
 
   useEffect(() => {
     if (!session || !session.user) return;
-
     fetchAllMessages();
-
     fetchAcceptMessages();
   }, [session, setValue, toast, fetchAcceptMessages, fetchAllMessages]);
 
+  //change message status
+
   const handleSwitchChange = async () => {
     try {
+      console.log(acceptMessages)
       const response = await axios.post("/api/messages/acceptmessages", {
         acceptMessages: !acceptMessages,
       });
-      console.log(response)
+    
       if(response.data.success){
-        setValue("acceptMessages", response.data.isAcceptingMessages);
+        setValue("acceptMessages", response.data.updatedUser.isAcceptingMessages);
         toast({
           title: response.data.message,
           variant: "default",
@@ -140,12 +142,13 @@ function DashboardPage() {
     });
   };
 
+
   if (!session || !session.user) {
-    return <div>Plesae Signin first</div>;
+    return <div className="min-h-[73vh] flex justify-center items-center font-bold text-3xl">Plesae Signin first</div>;
   }
   return (
     <>
-      <div className="my-8 mx-4 md:mx-8 lg:mx-auto p-6 bg-white rounded w-full max-w-6xl">
+      <div className="my-8 mx-4 md:mx-8 lg:mx-auto p-6 bg-white rounded w-full max-w-6xl min-h-[72vh]">
         <h1 className="text-4xl font-bold mb-4">User Dashboard</h1>
 
         <div className="mb-4">
