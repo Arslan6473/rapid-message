@@ -23,12 +23,12 @@ export const POST = async (request: Request) => {
       );
     }
 
-    const isCodeCorrect = user.varifyCode === code;
-    const isCodeNotExpired = new Date(user.varifyCodeExpiry) > new Date();
+    const isCodeCorrect = user.verifyCode === code;
+    const isCodeNotExpired = new Date(user.verifyCodeExpiry) > new Date();
 
     if (isCodeCorrect && isCodeNotExpired) {
         //varify user
-      user.isVarified = true;
+      user.isVerified = true;
       await user.save();
 
       return Response.json(

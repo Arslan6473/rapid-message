@@ -6,6 +6,8 @@ export const POST = async (request: Request) => {
   try {
     const { userName, content } = await request.json();
 
+    console.log({ userName, content })
+
     const user = await UserModel.findOne({ userName });
 
     if (!user) {
@@ -16,7 +18,7 @@ export const POST = async (request: Request) => {
     }
 
     //check if user is accepting messages
-    if (!user.isAcceptingMessage) {
+    if (!user.isAcceptingMessages) {
       return Response.json(
         { message: "User not accepting messages", success: false },
         { status: 404 }
@@ -25,7 +27,7 @@ export const POST = async (request: Request) => {
 
     const newMessage = { content, createdAt: new Date() };
 
-    user.message.push(newMessage as Message);
+    user.messages.push(newMessage as Message);
 
     user.save();
 

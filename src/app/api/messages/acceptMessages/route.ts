@@ -8,7 +8,7 @@ export const POST = async (request: Request) => {
 
   const session = await getServerSession(authOptions);
 
-  if (!session || session.user) {
+  if (!session || !session.user) {
     return Response.json(
       {
         success: false,
@@ -26,9 +26,7 @@ export const POST = async (request: Request) => {
   try {
     const updatedUser = await UserModel.findByIdAndUpdate(
       userId,
-      {
-        isAcceptingMessage: acceptMessages,
-      },
+      { isAcceptingMessages: acceptMessages },
       { new: true }
     );
 
@@ -70,7 +68,7 @@ export const POST = async (request: Request) => {
 export const GET = async (request: Request) => {
   const session = await getServerSession(authOptions);
 
-  if (!session || session.user) {
+  if (!session || !session.user) {
     return Response.json(
       {
         success: false,
@@ -86,6 +84,7 @@ export const GET = async (request: Request) => {
   try {
     //get user from database
     const user = await UserModel.findById(userId);
+    console;
 
     if (!user) {
       return Response.json(
@@ -102,7 +101,7 @@ export const GET = async (request: Request) => {
     return Response.json(
       {
         success: true,
-        isAcceptingMessage: user.isAcceptingMessage,
+        isAcceptingMessages: user.isAcceptingMessages,
       },
       {
         status: 201,

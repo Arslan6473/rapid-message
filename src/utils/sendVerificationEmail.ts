@@ -2,7 +2,7 @@ import { resend } from "@/lib/resendEmail";
 import VerificationEmail from "@/emails/VarificationEmail";
 import { ApiResponse } from "@/types/apiResponse";
 
-export const sendVarificationCode = async (
+export const sendVerificationCode = async (
   email: string,
   userName: string,
   varifyCode: string

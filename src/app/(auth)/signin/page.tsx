@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { redirect, useRouter } from "next/navigation";
 import { useToast } from "@/components/ui/use-toast";
 import * as z from "zod";
 import { useForm } from "react-hook-form";
@@ -19,15 +18,13 @@ import { Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { signInValidation } from "@/schemas/signInSchema";
-import { signIn, useSession } from "next-auth/react";
+import { signIn } from "next-auth/react";
+import { useRouter } from 'next/navigation';
 
 function SigninPage() {
-  const { status } = useSession();
-  if (status === "authenticated") redirect("/");
-
+  const router = useRouter();
   const [isSignInUser, setIsSignInUser] = useState(false);
 
-  const router = useRouter();
   const { toast } = useToast();
 
   const form = useForm({
@@ -43,7 +40,7 @@ function SigninPage() {
     const result = await signIn("credentials", {
       email: data.email,
       password: data.password,
-      redirect: false,
+      redirect:false
     });
 
     if (result?.error) {
@@ -52,14 +49,15 @@ function SigninPage() {
         description: "Incorrect email or password",
         variant: "destructive",
       });
+     
     }
 
-    if (result?.url) {
+    if (result?.ok) {
       toast({
         title: "Success",
         description: "User signin successfully",
       });
-      router.refresh();
+      router.replace('/dashboard');
     }
 
     setIsSignInUser(false);

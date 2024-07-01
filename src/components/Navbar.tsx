@@ -18,7 +18,7 @@ function Navbar() {
           {session ? (
             <>
               <span className="mr-4">
-                Welcome, {user.username || user.email}
+                Welcome, {user.userName || user.email}
               </span>
               <Button
                 onClick={() => signOut()}
@@ -34,7 +34,7 @@ function Navbar() {
                 className="w-full md:w-auto bg-slate-100 text-black"
                 variant={"outline"}
               >
-                Login
+                Sign in
               </Button>
             </Link>
           )}

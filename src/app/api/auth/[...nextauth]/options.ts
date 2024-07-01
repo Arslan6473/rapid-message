@@ -16,27 +16,27 @@ export const authOptions: NextAuthOptions = {
         const email = credentials.email;
         const password = credentials.password;
         await connectDB();
+
         try {
-          const user = await UserModel.findOne({
-            email,
-          });
+          const user = await UserModel.findOne({ email });
+
           if (!user) {
             throw new Error("No user found with this email");
           }
-          if (!user.isVarified) {
+
+          if (!user.isVerified) {
             throw new Error("Please verify your account before logging in");
           }
-          const isPasswordCorrect = await bcryptjs.compare(
-            credentials.password,
-            user.password
-          );
+
+          const isPasswordCorrect = await bcryptjs.compare(password, user.password);
+
           if (isPasswordCorrect) {
             return user;
           } else {
             throw new Error("Incorrect password");
           }
         } catch (err: any) {
-          throw new Error(err);
+          throw new Error(err.message);
         }
       },
     }),
@@ -45,7 +45,7 @@ export const authOptions: NextAuthOptions = {
     async jwt({ token, user }) {
       if (user) {
         token._id = user._id?.toString();
-        token.isVerified = user.isVerified;
+        token.isVarified = user.isVerified;
         token.isAcceptingMessages = user.isAcceptingMessages;
         token.userName = user.userName;
       }
@@ -54,7 +54,7 @@ export const authOptions: NextAuthOptions = {
     async session({ session, token }) {
       if (token) {
         session.user._id = token._id;
-        session.user.isVerified = token.isVerified;
+        session.user.isVarified = token.isVarified;
         session.user.isAcceptingMessages = token.isAcceptingMessages;
         session.user.userName = token.userName;
       }

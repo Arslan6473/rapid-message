@@ -1,19 +1,19 @@
 import { connectDB } from "@/db/dbConfig";
 import { UserModel } from "@/models/userModel";
 import bcryptjs from "bcryptjs";
-import { sendVarificationCode } from "@/utils/sendVarificationEmail";
+import { sendVerificationCode } from "@/utils/sendVerificationEmail";
 
 export const POST = async (request: Request) => {
   await connectDB();
   try {
     const { userName, email, password } = await request.json();
 
-    const existedVarifiedUser = await UserModel.findOne({
+    const existedVerifiedUser = await UserModel.findOne({
       userName,
-      isVarified: true,
+      isVerified: true,
     });
 
-    if (existedVarifiedUser) {
+    if (existedVerifiedUser) {
       return Response.json(
         {
           success: false,
@@ -26,15 +26,15 @@ export const POST = async (request: Request) => {
     }
 
     const hashedPassword = await bcryptjs.hash(password, 10);
-    const varifyCode = Array.from({ length: 6 }, () =>
+    const verifyCode = Array.from({ length: 6 }, () =>
       Math.floor(Math.random() * 10)
     ).join("");
 
-    const varifyCodeExpiry = new Date(Date.now() + 3600000);
+    const verifyCodeExpiry = new Date(Date.now() + 3600000);
 
     const existedUserwithEmail = await UserModel.findOne({ email });
     if (existedUserwithEmail) {
-      if (existedUserwithEmail?.isVarified) {
+      if (existedUserwithEmail?.isVerified) {
         return Response.json(
           {
             success: false,
@@ -46,8 +46,8 @@ export const POST = async (request: Request) => {
         );
       } else {
         existedUserwithEmail.password = hashedPassword;
-        existedUserwithEmail.varifyCode = varifyCode;
-        existedUserwithEmail.varifyCodeExpiry = varifyCodeExpiry;
+        existedUserwithEmail.verifyCode = verifyCode;
+        existedUserwithEmail.verifyCodeExpiry = verifyCodeExpiry;
 
         await existedUserwithEmail.save();
       }
@@ -56,8 +56,8 @@ export const POST = async (request: Request) => {
         userName,
         email,
         password: hashedPassword,
-        varifyCode,
-        varifyCodeExpiry,
+        verifyCode,
+        verifyCodeExpiry,
         message: [],
       });
 
@@ -74,10 +74,10 @@ export const POST = async (request: Request) => {
     }
 
     //send varification code
-    const emailResponse = await sendVarificationCode(
+    const emailResponse = await sendVerificationCode(
       email,
       userName,
-      varifyCode
+      verifyCode
     );
 
     if (!emailResponse.success) {

@@ -4,11 +4,11 @@ import mongoose from "mongoose";
 import { getServerSession } from "next-auth";
 import { authOptions } from "../../auth/[...nextauth]/options";
 
-export const GET = async () => {
+export const GET = async (request: Request) => {
   await connectDB();
   const session = await getServerSession(authOptions);
 
-  if (!session || session.user) {
+  if (!session || !session.user) {
     return Response.json(
       {
         success: false,
@@ -25,10 +25,14 @@ export const GET = async () => {
   try {
     const user = await UserModel.aggregate([
       { $match: { _id: userId } },
-      { $unwind: "$messages" },
-      { $sort: { "messages.createdAt": -1 } },
-      { $group: { _id: "$_id", messages: { $push: "$messages" } } },
-    ]);
+      { $unwind: '$messages' },
+      { $sort: { 'messages.createdAt': -1 } },
+      { $group: { _id: '$_id', messages: { $push: '$messages' } } },
+
+     
+    ]).exec();
+
+ 
 
     if (!user || user.length === 0) {
       return Response.json(
@@ -36,9 +40,12 @@ export const GET = async () => {
         { status: 404 }
       );
     }
-
+    
+  
     return Response.json(
-      { messages: user[0].messages },
+      { 
+        success:true,
+        messages: user[0].messages },
       {
         status: 200,
       }
