@@ -2,9 +2,12 @@
 ## A Next.js full stack Application
 
 Key Features:
+
 * User can send messages to each other.
 * Every user have aunique username.
+  
 Technologies:
+
 * Next.js
 * NextAuth.js for autentication
 * MongoDB database
