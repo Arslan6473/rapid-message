@@ -6,7 +6,7 @@ export const config = {
 };
 
 export async function middleware(request: NextRequest) {
-  const token = request.cookies.get("next-auth.session-token")?.value;
+  const token = request.cookies.get("__Secure-next-auth.session-token")?.value;
   const url = request.nextUrl;
 
   // Redirect authenticated users away from signin, signup, verify, and root paths
