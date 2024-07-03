@@ -49,7 +49,7 @@ export default function SendMessage() {
     try {
         setIsLoading(true);
       const response = await axios.post<ApiResponse>(
-        "/api/messages/sendmessage",
+        "/api/messages/send-message",
         {
           ...data,
           from:messageFrom,

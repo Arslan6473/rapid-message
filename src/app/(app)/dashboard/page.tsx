@@ -38,7 +38,7 @@ function DashboardPage() {
     try {
       setIsSwitchLoading(true);
 
-      const response = await axios.get("/api/messages/acceptmessages");
+      const response = await axios.get("/api/messages/accept-messages");
       if (response.data.success) {
         setValue("acceptMessages ", response.data.isAcceptingMessages);
       }
@@ -64,7 +64,7 @@ function DashboardPage() {
         setIsLoading(true);
         setIsSwitchLoading(true);
 
-        const response = await axios.get("/api/messages/getallmessages");
+        const response = await axios.get("/api/messages/get-all-messages");
     
         if (response.data.success) {
           setMessages(response.data.messages);
@@ -102,7 +102,7 @@ function DashboardPage() {
   const handleSwitchChange = async () => {
     try {
       console.log(acceptMessages)
-      const response = await axios.post("/api/messages/acceptmessages", {
+      const response = await axios.post("/api/messages/accept-messages", {
         acceptMessages: !acceptMessages,
       });
     
