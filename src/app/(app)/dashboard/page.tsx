@@ -144,7 +144,7 @@ function DashboardPage() {
 
 
   if (!session || !session.user) {
-    return <div className="min-h-[73vh] flex justify-center items-center font-bold text-3xl">Plesae Signin first</div>;
+    return <div className="min-h-[74vh] flex justify-center items-center font-bold text-3xl">Plesae Signin first</div>;
   }
   return (
     <>
